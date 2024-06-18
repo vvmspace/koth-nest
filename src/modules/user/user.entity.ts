@@ -13,13 +13,13 @@ export class User {
   @Column({ nullable: true, type: 'bigint' })
   telegramReferrerId: number;
 
-  @Column({ default: 0, type: 'bigint' })
+  @Column({ default: 0 })
   steps: number;
 
-  @Column({ default: 0, type: 'bigint' })
+  @Column({ default: 0 })
   coffees: number;
 
-  @Column({ default: 0, type: 'bigint' })
+  @Column({ default: 0 })
   sandwiches: number;
 
   @Column({ nullable: true })

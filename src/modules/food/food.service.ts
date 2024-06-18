@@ -9,7 +9,7 @@ export class FoodService {
   async shareFood(telegramReferrerId: number) {
     const referrer = await this.giveSandwich(telegramReferrerId);
     console.log('Given sandwich to', referrer.name || referrer.telegramUsername, referrer.telegramId);
-    if (!referrer.telegramReferrerId) {
+    if (!referrer.telegramReferrerId || referrer.telegramReferrerId === referrer.telegramId) {
       return;
     }
     await this.giveCoffee(referrer.telegramReferrerId);

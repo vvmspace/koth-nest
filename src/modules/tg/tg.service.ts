@@ -92,7 +92,7 @@ export class TGService {
           `${telegramId}`,
           `Welcome to beta version of King of the Hill game!
 
-Awake the King of the Hill to start the game!
+Wake up the King of the Hill to start the game!
 
 We are currently working on the game mechanics.
 Stay tuned for updates!`,

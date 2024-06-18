@@ -55,6 +55,7 @@ export class AuthService {
     if (user) {
       const r = await this.createToken(user);
       if ((!user.name || !user.languageCode) && ((telegramUser.first_name || telegramUser.username) && telegramUser.language_code)) {
+        user.telegramUsername = telegramUser.username;
         user.name = telegramUser.username || telegramUser.first_name;
         user.languageCode = telegramUser.language_code;
         await this.userService.update(user.id, user);

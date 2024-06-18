@@ -7,13 +7,13 @@ export class FoodService {
   constructor(private userService: UsersService) {}
 
   async shareFood(telegramReferrerId: number) {
-    const refeffer = await this.giveSandwich(telegramReferrerId);
-    if (!refeffer.telegramReferrerId) {
+    const referrer = await this.giveSandwich(telegramReferrerId);
+    console.log('Given sandwich to', telegramReferrerId);
+    if (!referrer.telegramReferrerId) {
       return;
     }
-    await this.giveCoffee(refeffer.telegramReferrerId);
-    console.log('Given sandwich to', telegramReferrerId);
-    console.log('Given coffee to', refeffer.telegramReferrerId);
+    await this.giveCoffee(referrer.telegramReferrerId);
+    console.log('Given coffee to', referrer.telegramReferrerId);
   }
 
   async giveCoffee(telegramId: number) {

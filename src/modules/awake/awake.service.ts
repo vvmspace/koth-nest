@@ -35,7 +35,7 @@ export class AwakeService {
       }
       await this.userService.update(user.id, user);
       await this.giveBreakfast(user.telegramId);
-      console.log('Awake', user, user.lastAwake, diff);
+      console.log('Awake', user.telegramId, user.name, user.lastAwake, diff);
     }
 
     return { user, nextAwake };

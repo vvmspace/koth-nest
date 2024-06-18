@@ -51,18 +51,15 @@ export class AuthService {
 
     const telegramUser = JSON.parse(query.user) as TelegramUser;
 
-    console.log(query);
-
     const user = await this.userService.getByTelegramId(telegramUser.id);
-
-    console.log(user);
     if (user) {
       const r = await this.createToken(user);
-      console.log(r);
       return r;
     }
 
-    const r = await this.createToken(
+    console.log('Creating new user', telegramUser.id, telegramUser.username);
+
+    return this.createToken(
       await this.userService.create({
         telegramId: telegramUser.id,
         name: telegramUser.first_name,
@@ -70,10 +67,6 @@ export class AuthService {
         languageCode: telegramUser.language_code,
       }),
     );
-
-    console.log(r);
-
-    return r;
   }
 
   async createToken(user: User): Promise<JWTResponse> {

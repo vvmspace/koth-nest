@@ -54,7 +54,6 @@ export class TGService {
       'TELEGRAM_ADMIN_CHAT_ID',
     );
     if (!TELEGRAM_ADMIN_CHAT_ID) {
-      console.log(data);
       return;
     }
     const text =

@@ -83,13 +83,17 @@ export class TGService {
           sandwiches: 2,
         });
         await this.sendTelegramMessage(
-          telegramReferrerId.toString(),
+          `${telegramReferrerId}`,
           `Your friend ${userNickname} joined the game!`,
         );
         await this.sendTelegramMessage(
-          telegramId.toString(),
-          'Welcome to the game!',
-        );
+          `${telegramId}`,
+`Welcome to beta version of King of the Hill game!
+
+Awake the King of the Hill to start the game!
+
+We are currently working on the game mechanics.
+Stay tuned for updates!`);
         await this.sendAdminMessage(`New user: ${userNickname}`);
       }
     }

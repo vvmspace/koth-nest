@@ -48,7 +48,9 @@ export class AuthController {
       'AWAKE_INTERVAL',
       AWAKE_INTERVAL,
     );
-    const nextAwake = new Date(user.lastAwake.getTime() + awakeInterval);
+    const nextAwake = user.lastAwake
+      ? new Date(user.lastAwake.getTime() + awakeInterval)
+      : new Date('2021-01-01');
     return {
       user,
       nextAwake,

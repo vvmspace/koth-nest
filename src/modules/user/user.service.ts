@@ -35,4 +35,15 @@ export class UsersService {
     await this.userRepository.update(id, payload);
     return this.get(id);
   }
+
+  // top 10 by steps desc
+
+  async top() {
+    return this.userRepository.find({
+      order: {
+        steps: 'DESC',
+      },
+      take: 10,
+    });
+  }
 }

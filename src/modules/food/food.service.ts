@@ -12,12 +12,15 @@ export class FoodService {
       return;
     }
     await this.giveCoffee(refeffer.telegramReferrerId);
+    console.log('Given sandwich to', telegramReferrerId);
+    console.log('Given coffee to', refeffer.telegramReferrerId);
   }
 
   async giveCoffee(telegramId: number) {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
+        console.log('User not found', telegramId);
       return null;
     }
 
@@ -31,6 +34,7 @@ export class FoodService {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
+    console.log('User not found', telegramId);
       return null;
     }
 

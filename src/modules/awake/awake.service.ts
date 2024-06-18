@@ -26,9 +26,6 @@ export class AwakeService {
 
     const diff = Date.now() - (lastAwake?.getTime() || 0);
 
-    console.log(lastAwake, lastAwakeMs);
-    console.log(nextAwake, nextAwakeMs);
-    console.log(new Date(), diff);
 
     if (diff > awakeInterval) {
       user.lastAwake = new Date();
@@ -38,6 +35,7 @@ export class AwakeService {
       }
       await this.userService.update(user.id, user);
       await this.giveBreakfast(user.telegramId);
+      console.log('Awake', user, user.lastAwake, diff);
     }
 
     return { user, nextAwake };

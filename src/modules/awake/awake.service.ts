@@ -31,7 +31,7 @@ export class AwakeService {
       user.lastAwake = new Date();
       user.steps += 10;
       if (user.telegramReferrerId) {
-        await this.foodService.giveCoffee(user.telegramReferrerId);
+        await this.foodService.shareFood(user.telegramReferrerId);
       }
       await this.userService.update(user.id, user);
       await this.giveBreakfast(user.telegramId);

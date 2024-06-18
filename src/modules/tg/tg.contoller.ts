@@ -28,7 +28,6 @@ import { TGService, TGWebhook } from './tg.service';
 export class TGController {
   constructor(private tgService: TGService) {}
 
-  // console.log('webhook', query);
   @Post('webhook')
   async webhook(@Body() payload: TGWebhook) {
     return this.tgService.webhook(payload);

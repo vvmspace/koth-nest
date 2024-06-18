@@ -36,7 +36,10 @@ export class UsersService {
     return this.get(id);
   }
 
-  // top 10 by steps desc
+  
+  async count() {
+    return this.userRepository.count();
+  }
 
   async top() {
     return this.userRepository.find({

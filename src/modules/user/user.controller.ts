@@ -7,9 +7,20 @@ export class UsersController {
         private usersService: UsersService,
     ) {}
 
+    //deprecated
     @Get()
+    async top_old() {
+        return this.usersService.top();
+    }
+
+    @Get('top')
     async top() {
         return this.usersService.top();
+    }
+
+    @Get('count')
+    async count() {
+        return this.usersService.count();
     }
 
 }

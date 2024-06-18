@@ -7,19 +7,19 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'bigint' })
   telegramId: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'bigint'})
   telegramReferrerId: number;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'bigint' })
   steps: number;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'bigint' })
   coffees: number;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'bigint' })
   sandwiches: number;
 
   @Column({ nullable: true })

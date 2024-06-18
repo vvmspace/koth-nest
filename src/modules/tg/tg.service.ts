@@ -63,9 +63,13 @@ export class TGService {
   }
 
   async webhook(payload: TGWebhook) {
-    const text = payload.message.text;
+    const text = payload.message?.text;
+    if (!text) {
+        console.warn(payload);
+        return 'ok';
+    }
     if (text.startsWith('/start')) {
-      const telegramReferrerId = +text.split(' ')[1];
+      const telegramReferrerId = +text?.split(' ')[1];
       const telegramId = payload.message.from.id;
       const userNickname = payload.message.from.username
         ? `@${payload.message.from.username}`

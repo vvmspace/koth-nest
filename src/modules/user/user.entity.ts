@@ -10,7 +10,7 @@ export class User {
   @Column({ type: 'bigint' })
   telegramId: number;
 
-  @Column({ nullable: true, type: 'bigint'})
+  @Column({ nullable: true, type: 'bigint' })
   telegramReferrerId: number;
 
   @Column({ default: 0, type: 'bigint' })

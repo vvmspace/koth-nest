@@ -100,4 +100,5 @@ Already preconfigured JWT authentication.
 It's suggested to change current password hashing to something more secure.
 You can start use already working implementation of `Login` and `Registration`
 endpoints, just take a look at [http://localhost/api/docs](http://localhost/api/docs).
+
 # koth-nest

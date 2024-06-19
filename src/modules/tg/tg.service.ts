@@ -82,8 +82,8 @@ export class TGService {
           telegramUsername: payload.message.from.username,
           name: userNickname,
           steps: 0,
-          coffees: 5,
-          sandwiches: 2,
+          coffees: 100,
+          sandwiches: 50,
         });
         if (telegramReferrerId) {
           await this.sendTelegramMessage(

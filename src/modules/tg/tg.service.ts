@@ -8,7 +8,7 @@ export class TGWebhook {
   message: {
     message_id: number;
     from: {
-      id: number;
+      id: string;
       is_bot: boolean;
       first_name: string;
       username: string;
@@ -68,7 +68,7 @@ export class TGService {
         return 'ok';
     }
     if (text.startsWith('/start')) {
-      const telegramReferrerId = +text?.split(' ')[1];
+      const telegramReferrerId = text?.split(' ')[1];
       const telegramId = payload.message.from.id;
       const userNickname = payload.message.from.username
         ? `@${payload.message.from.username}`

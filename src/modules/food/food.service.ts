@@ -6,7 +6,7 @@ import { UsersService } from 'modules/user/user.service';
 export class FoodService {
   constructor(private userService: UsersService) {}
 
-  async shareFood(telegramReferrerId: number) {
+  async shareFood(telegramReferrerId: string) {
     const referrer = await this.giveSandwich(telegramReferrerId);
     console.log('Given sandwich to', referrer.name || referrer.telegramUsername, referrer.telegramId);
     if (!referrer.telegramReferrerId || referrer.telegramReferrerId === referrer.telegramId) {
@@ -16,7 +16,7 @@ export class FoodService {
     console.log('Given coffee to', referrer.telegramReferrerId);
   }
 
-  async giveCoffee(telegramId: number) {
+  async giveCoffee(telegramId: string) {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
@@ -30,7 +30,7 @@ export class FoodService {
     return user;
   }
 
-  async giveSandwich(telegramId: number) {
+  async giveSandwich(telegramId: string) {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {

@@ -15,7 +15,7 @@ export class UsersService {
     return this.userRepository.findOne({ id });
   }
 
-  async getByTelegramId(telegramId: number) {
+  async getByTelegramId(telegramId: string) {
     return await this.userRepository.findOne({ telegramId });
   }
 

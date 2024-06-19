@@ -43,7 +43,7 @@ export class AwakeService {
     return { user, nextAwake };
   }
 
-  async giveBreakfast(telegramId: number) {
+  async giveBreakfast(telegramId: string) {
     await this.foodService.giveCoffee(telegramId);
     await this.foodService.giveSandwich(telegramId);
   }

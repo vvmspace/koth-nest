@@ -1,6 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
 export class UserIndexes1718778353269 implements MigrationInterface {
+    name = 'UserIndexes1718778353269';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE INDEX "IDX_TELEGRAM_ID" ON "users" ("telegramId") `);

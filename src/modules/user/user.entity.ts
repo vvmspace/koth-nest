@@ -7,11 +7,11 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'bigint' })
-  telegramId: number;
+  @Column()
+  telegramId: string;
 
-  @Column({ nullable: true, type: 'bigint' })
-  telegramReferrerId: number;
+  @Column()
+  telegramReferrerId: string;
 
   @Column({ default: 0 })
   steps: number;

@@ -23,7 +23,7 @@ export class FoodService {
     console.log('Given coffee to', referrer.telegramReferrerId);
   }
 
-  async giveCoffee(telegramId: string) {
+  async giveCoffee(telegramId: string, count = 1) {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
@@ -31,13 +31,13 @@ export class FoodService {
       return null;
     }
 
-    user.coffees++;
+    user.coffees += count;
 
     await this.userService.update(user.id, user);
     return user;
   }
 
-  async giveSandwich(telegramId: string) {
+  async giveSandwich(telegramId: string, count = 1) {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
@@ -45,7 +45,7 @@ export class FoodService {
       return null;
     }
 
-    user.sandwiches++;
+    user.sandwiches += count;
 
     await this.userService.update(user.id, user);
     return user;
@@ -69,5 +69,13 @@ export class FoodService {
 
     await this.userService.update(user.id, user);
     return user;
+  }
+
+  async useBonus(user: Partial<User>) {
+    user.lastBonus = new Date();
+    user.steps += Math.floor(Math.random() * 50) + 1;
+    await this.userService.update(user.id, user);
+    await this.giveCoffee(user.telegramId, Math.floor(Math.random() * 5) + 1);
+    await this.giveSandwich(user.telegramId, Math.floor(Math.random() * 3) + 1);
   }
 }

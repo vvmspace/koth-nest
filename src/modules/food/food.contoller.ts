@@ -22,4 +22,11 @@ export class FoodController {
   async useSandwich(@CurrentUser() user: Partial<User>) {
     return this.foodService.useSandwich(user);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Post('bonus')
+  async useBonus(@CurrentUser() user: Partial<User>) {
+    return this.foodService.useBonus(user);
+  }
 }

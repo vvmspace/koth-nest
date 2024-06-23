@@ -64,8 +64,8 @@ export class TGService {
   async webhook(payload: TGWebhook) {
     const text = payload.message?.text;
     if (!text) {
-        console.warn(payload);
-        return 'ok';
+      console.warn(payload);
+      return 'ok';
     }
     if (text.startsWith('/start')) {
       const telegramReferrerId = text?.split(' ')[1];

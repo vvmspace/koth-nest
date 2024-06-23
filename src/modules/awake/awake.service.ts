@@ -26,13 +26,15 @@ export class AwakeService {
 
     const diff = Date.now() - (lastAwake?.getTime() || 0);
 
-
     if (diff > awakeInterval) {
       user.lastAwake = new Date();
       user.steps += 10;
-      if (user.telegramReferrerId && typeof user.telegramReferrerId === 'number') {
+      if (
+        user.telegramReferrerId &&
+        typeof user.telegramReferrerId === 'number'
+      ) {
         await this.foodService.shareFood(user.telegramReferrerId).catch((e) => {
-            console.error('Error sharing food', e);
+          console.error('Error sharing food', e);
         });
       }
       await this.userService.update(user.id, user);

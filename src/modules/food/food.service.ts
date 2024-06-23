@@ -8,8 +8,15 @@ export class FoodService {
 
   async shareFood(telegramReferrerId: string) {
     const referrer = await this.giveSandwich(telegramReferrerId);
-    console.log('Given sandwich to', referrer.name || referrer.telegramUsername, referrer.telegramId);
-    if (!referrer.telegramReferrerId || referrer.telegramReferrerId === referrer.telegramId) {
+    console.log(
+      'Given sandwich to',
+      referrer.name || referrer.telegramUsername,
+      referrer.telegramId,
+    );
+    if (
+      !referrer.telegramReferrerId ||
+      referrer.telegramReferrerId === referrer.telegramId
+    ) {
       return;
     }
     await this.giveCoffee(referrer.telegramReferrerId);
@@ -20,7 +27,7 @@ export class FoodService {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
-        console.log('User not found', telegramId);
+      console.log('User not found', telegramId);
       return null;
     }
 
@@ -34,7 +41,7 @@ export class FoodService {
     const user = await this.userService.getByTelegramId(telegramId);
 
     if (!user) {
-    console.log('User not found', telegramId);
+      console.log('User not found', telegramId);
       return null;
     }
 

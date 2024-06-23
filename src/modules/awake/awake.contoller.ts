@@ -13,7 +13,13 @@ export class AwakeController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   async awake(@CurrentUser() user: Partial<User>) {
-    console.log('api/awake', user.telegramId, user.lastAwake, user.steps, user.name);
+    console.log(
+      'api/awake',
+      user.telegramId,
+      user.lastAwake,
+      user.steps,
+      user.name,
+    );
     return this.awakeService.awake(user);
   }
 }

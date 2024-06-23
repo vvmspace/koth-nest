@@ -36,7 +36,6 @@ export class UsersService {
     return this.get(id);
   }
 
-  
   async count() {
     return this.userRepository.count();
   }

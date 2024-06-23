@@ -20,24 +20,23 @@ export class AwakeService {
     );
 
     const lastAwakeMs = user.lastAwake?.getTime() || 0;
-    const lastAwake = user.lastAwake;
     const nextAwakeMs = lastAwakeMs + awakeInterval;
     const nextAwake = new Date(nextAwakeMs);
 
-    const diff = Date.now() - (lastAwake?.getTime() || 0);
+    const diff = Date.now() - (lastAwakeMs);
 
     if (diff > awakeInterval) {
       user.lastAwake = new Date();
       user.steps += 10;
+      await this.userService.update(user.id, user);
       if (
-        user.telegramReferrerId &&
-        typeof user.telegramReferrerId === 'number'
+        user.telegramReferrerId
       ) {
+        console.log('Sharing food with', user.telegramReferrerId);
         await this.foodService.shareFood(user.telegramReferrerId).catch((e) => {
           console.error('Error sharing food', e);
         });
       }
-      await this.userService.update(user.id, user);
       await this.giveBreakfast(user.telegramId);
       console.log('Awake', user.telegramId, user.name, user.lastAwake, diff);
     }

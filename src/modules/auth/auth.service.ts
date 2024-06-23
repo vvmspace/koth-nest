@@ -53,6 +53,7 @@ export class AuthService {
 
     const user = await this.userService.getByTelegramId(telegramUser.id);
     if (user) {
+      console.log('Authenticating user', user.id, user.telegramId, user.name);
       const r = await this.createToken(user);
       if (
         (!user.name || !user.languageCode) &&

@@ -32,5 +32,8 @@ export class User {
   lastAwake: Date;
 
   @Column({ nullable: true })
+  lastBonus: Date;
+
+  @Column({ nullable: true })
   languageCode: string;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { ConfigService } from 'modules/config';
 import { User } from 'modules/user';
 import { UsersService } from 'modules/user/user.service';
@@ -29,7 +29,8 @@ export class TGWebhook {
 @Injectable()
 export class TGService {
   constructor(
-    private userService: UsersService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly userService: UsersService,
     private configService: ConfigService,
   ) {}
 

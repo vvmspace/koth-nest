@@ -7,11 +7,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AwakeModule } from 'modules/awake/awake.module';
 import { TGModule } from 'modules/tg/tg.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule,
+        ScheduleModule.forRoot(),
+      ],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {

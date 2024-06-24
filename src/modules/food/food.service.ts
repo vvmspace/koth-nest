@@ -73,7 +73,10 @@ export class FoodService {
   }
 
   async useBonus(user: Partial<User>) {
-    if (user.lastBonus && new Date().getTime() - user.lastBonus.getTime() < 86400000) {
+    if (
+      user.lastBonus &&
+      new Date().getTime() - user.lastBonus.getTime() < 86400000
+    ) {
       return;
     }
     user.lastBonus = new Date();
@@ -81,6 +84,10 @@ export class FoodService {
     await this.userService.update(user.id, user);
     await this.giveCoffee(user.telegramId, Math.floor(Math.random() * 5) + 1);
     await this.giveSandwich(user.telegramId, Math.floor(Math.random() * 3) + 1);
-    console.log('Given bonus to', user.name || user.telegramUsername, user.telegramId);
+    console.log(
+      'Given bonus to',
+      user.name || user.telegramUsername,
+      user.telegramId,
+    );
   }
 }

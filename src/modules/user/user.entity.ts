@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity({
   name: 'users',
@@ -36,6 +36,10 @@ export class User {
 
   @Column({ nullable: true })
   lastBonus: Date;
+
+  @Index('IDX_LAST_REMINDER')
+  @Column({ nullable: true })
+  lastReminder: Date;
 
   @Column({ nullable: true })
   languageCode: string;

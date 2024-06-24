@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotAcceptableException, forwardRef } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotAcceptableException,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -12,7 +17,7 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @Inject(forwardRef(() => TGService))
     private readonly tgService: TGService,
-    ) {}
+  ) {}
 
   async get(id: number) {
     return this.userRepository.findOne({ id });
@@ -53,28 +58,25 @@ export class UsersService {
   }
 
   async getReminderUser() {
-    console.log('getReminderUser');
-    
     const ONE_DAY = 24 * 60 * 60 * 1000;
-    const TWO_DAYS = 2 * ONE_DAY;
-  
+    // const TWO_DAYS = 2 * ONE_DAY;
+
     const lastBonusDate = new Date(Date.now() - ONE_DAY);
-    const lastReminderDate = new Date(Date.now() - TWO_DAYS);
-  
+    const lastReminderDate = new Date(Date.now() - ONE_DAY);
+
     const result = await this.userRepository
       .createQueryBuilder('user')
-      .where('user.lastBonus is null OR user.lastBonus < :lastBonusDate', { lastBonusDate })
-      .andWhere('user.lastReminder is null OR user.lastReminder < :lastReminderDate', { lastReminderDate })
+      .where(
+        '(user.lastBonus is null OR user.lastBonus < :lastBonusDate) and (user.lastReminder is null OR user.lastReminder < :lastReminderDate)',
+        { lastBonusDate, lastReminderDate },
+      )
       .orderBy('user.lastReminder', 'ASC')
       .limit(1)
       .getMany();
 
-    console.log('result', result);
     return result.length > 0 ? result[0] : null;
-}
-  
-  
-  
+  }
+
   async remind(user: User) {
     if (!user) {
       return;

@@ -12,9 +12,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule,
-        ScheduleModule.forRoot(),
-      ],
+      imports: [ConfigModule, ScheduleModule.forRoot()],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {

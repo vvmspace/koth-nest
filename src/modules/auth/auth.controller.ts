@@ -32,6 +32,7 @@ export class AuthController {
     @Req() request: Request,
     @Query() user: TelegramQuery,
   ): Promise<JWTResponse> {
+    console.log('Auth attempt');
     const rawQuery = request.url.split('?')[1];
     return this.authService.verifyAndLogin(rawQuery, user);
   }

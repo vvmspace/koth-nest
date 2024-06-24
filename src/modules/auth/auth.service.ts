@@ -46,6 +46,7 @@ export class AuthService {
   ): Promise<JWTResponse> {
     const isValid = await this.verifyTelegramData(rawQuery);
     if (!isValid) {
+      console.log('Invalid Telegram data');
       throw new UnauthorizedException('Invalid Telegram data');
     }
 
@@ -65,6 +66,8 @@ export class AuthService {
         user.languageCode = telegramUser.language_code;
         await this.userService.update(user.id, user);
       }
+
+      console.log(r);
       return r;
     }
 

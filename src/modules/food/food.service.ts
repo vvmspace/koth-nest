@@ -1,14 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { TGService } from 'modules/tg/tg.service';
 import { User } from 'modules/user';
 import { UsersService } from 'modules/user/user.service';
 
 @Injectable()
 export class FoodService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    @Inject(forwardRef(() => TGService))
+    private readonly tgService: TGService,
+  ) {}
 
-  async shareFood(telegramReferrerId: string) {
+  async shareFood(telegramReferrerId: string, user?: Partial<User>) {
     console.log('Sharing food with', telegramReferrerId);
     const referrer = await this.giveSandwich(telegramReferrerId);
+    if (user) {
+      await this.tgService.sendTelegramMessage(
+        telegramReferrerId,
+        `🥪 ${
+          user?.name || user?.telegramUsername || user?.telegramId
+        } gave you a sandwich!`,
+      ).catch(e => console.warn('Failed to send message: ' + e.message));
+    }
     console.log(
       'Given sandwich to',
       referrer.name || referrer.telegramUsername,
@@ -22,6 +35,14 @@ export class FoodService {
     }
     await this.giveCoffee(referrer.telegramReferrerId);
     console.log('Given coffee to', referrer.telegramReferrerId);
+    if (user) {
+      await this.tgService.sendTelegramMessage(
+        referrer.telegramReferrerId,
+        `☕️ some friend of ${
+          user?.name || user?.telegramUsername || user?.telegramId
+        } gave you a coffee!`,
+      );
+    }
   }
 
   async giveCoffee(telegramId: string, count = 1) {
@@ -89,5 +110,8 @@ export class FoodService {
       user.name || user.telegramUsername,
       user.telegramId,
     );
+    await this.tgService.sendAdminMessage(`${user.name || user.telegramUsername},
+      ${user.telegramId} activated bonus`)
+      .catch(e => console.warn('Failed to send message: ' + e.message));
   }
 }

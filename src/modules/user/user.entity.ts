@@ -7,12 +7,15 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index('IDX_TELEGRAM_ID')
   @Column()
   telegramId: string;
 
-  @Column()
+  @Index('IDX_TELEGRAM_REFERRER_ID')
+  @Column({ nullable: true })
   telegramReferrerId: string;
 
+  @Index('IDX_STEPS')
   @Column({ default: 0 })
   steps: number;
 

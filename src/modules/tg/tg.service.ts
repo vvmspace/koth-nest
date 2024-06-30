@@ -34,7 +34,7 @@ export class TGService {
     private configService: ConfigService,
   ) {}
 
-  async sendTelegramMessage(chatId: string, text: string) {
+  async sendTelegramMessage(chatId: string, text: string, notify = true) {
     const TELEGRAM_BOT_TOKEN = this.configService.get('TELEGRAM_BOT_TOKEN');
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
@@ -46,11 +46,12 @@ export class TGService {
       body: JSON.stringify({
         chat_id: chatId,
         text,
+        parse_mode: 'Markdown'
       }),
     });
   }
 
-  async sendAdminMessage(data: unknown) {
+  async sendAdminMessage(data: unknown, notify = false) {
     const TELEGRAM_ADMIN_CHAT_ID = this.configService.get(
       'TELEGRAM_ADMIN_CHAT_ID',
     );
@@ -59,10 +60,13 @@ export class TGService {
     }
     const text =
       typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-    await this.sendTelegramMessage(TELEGRAM_ADMIN_CHAT_ID, text);
+    await this.sendTelegramMessage(TELEGRAM_ADMIN_CHAT_ID, text, notify);
   }
 
   async webhook(payload: TGWebhook) {
+    const add_steps = 100;
+    const add_coffees = 10 + Math.floor(Math.random() * Math.random() * Math.random() * 290);
+    const add_sandwiches = 10 + Math.floor(Math.random() * Math.random() * Math.random() * 140);
     const text = payload.message?.text;
     if (!text) {
       console.warn(payload);
@@ -77,7 +81,7 @@ export class TGService {
       const user = await this.userService.getByTelegramId(telegramId);
 
       if (!user) {
-        await this.userService.create({
+        const user = await this.userService.create({
           telegramReferrerId,
           telegramId,
           telegramUsername: payload.message.from.username,
@@ -87,21 +91,37 @@ export class TGService {
           sandwiches: 50,
         });
         if (telegramReferrerId) {
-          await this.sendTelegramMessage(
-            `${telegramReferrerId}`,
-            `Your friend ${userNickname} joined the game!`,
+          const referrer = await this.userService.getByTelegramId(
+            telegramReferrerId,
           );
+          if (referrer) {
+            referrer.steps += add_steps;
+            referrer.coffees += add_coffees;
+            referrer.sandwiches += add_sandwiches;
+            await this.userService.update(referrer.id, referrer);
+            await this.sendTelegramMessage(
+              `${telegramReferrerId}`,
+              `🎁Your friend ${userNickname} joined the game! You got *${add_steps} steps* 👣, *${add_coffees} coffees* ☕️ and *${add_sandwiches} sandwiches* 🥪!`,
+            );
+          }
         }
+//         await this.sendTelegramMessage(
+//           `${telegramId}`,
+//           `Welcome to beta version of King of the Hill game!
+
+// Wake up the King of the Hill to start the game!
+
+// We are currently working on the game mechanics.
+// Stay tuned for updates!`,
+//         );
+
+        const msg = this.userService.getReminderText(user, user.languageCode || 'en')
         await this.sendTelegramMessage(
           `${telegramId}`,
-          `Welcome to beta version of King of the Hill game!
+          msg,
+        )
 
-Wake up the King of the Hill to start the game!
-
-We are currently working on the game mechanics.
-Stay tuned for updates!`,
-        );
-        await this.sendAdminMessage(`New user: ${userNickname}`);
+        await this.sendAdminMessage('new: ' + msg, true);
       }
     }
     return 'ok';

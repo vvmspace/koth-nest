@@ -132,7 +132,14 @@ export class TGService {
           msg,
         )
 
-        await this.sendAdminMessage('new: ' + msg, true);
+        await this.sendAdminMessage(user.id + ' new: ' + msg + `
+\`\`\`json
+${JSON.stringify(user, null, 2)}
+\`\`\`
+
+\`\`\`json
+${JSON.stringify(payload, null, 2)}
+\`\`\``, true);
       }
     }
     return 'ok';

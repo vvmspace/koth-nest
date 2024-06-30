@@ -148,13 +148,13 @@ await this.tgService.sendAdminMessage(msg);
 
     await this.tgService.sendTelegramMessage(
       user.telegramId,
-      this.getReminderText(user),
+      this.getReminderText(user, user.languageCode || 'en'),
     );
 
     await this.tgService.sendAdminMessage(
       `Reminded ${
         user.telegramUsername || user.name || user.telegramId
-      } in ${diffDays} days.`,
+      } [${user.languageCode}] in ${diffDays} days.`,
     );
   }
 }

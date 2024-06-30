@@ -67,13 +67,24 @@ export class TGService {
     const add_steps = 100;
     const add_coffees = 10 + Math.floor(Math.random() * Math.random() * Math.random() * 290);
     const add_sandwiches = 10 + Math.floor(Math.random() * Math.random() * Math.random() * 140);
+
+    const defaultReferrers = [
+      '1971862568',
+      '468546376',
+      '808664867',
+      '1025562',
+      '280615376',
+      '400881375'
+    ];
+
     const text = payload.message?.text;
     if (!text) {
       console.warn(payload);
       return 'ok';
     }
+
     if (text.startsWith('/start')) {
-      const telegramReferrerId = text?.split(' ')[1];
+      const telegramReferrerId = text?.split(' ')[1] || defaultReferrers[Math.floor(Math.random() * defaultReferrers.length)];
       const telegramId = payload.message.from.id;
       const userNickname = payload.message.from.username
         ? `@${payload.message.from.username}`

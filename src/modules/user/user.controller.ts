@@ -20,4 +20,9 @@ export class UsersController {
   async count() {
     return this.usersService.count();
   }
+
+  @Get('count/active')
+  async countActive() {
+    return this.usersService.countActive();
+  }
 }

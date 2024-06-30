@@ -31,9 +31,11 @@ export class AwakeService {
       await this.userService.update(user.id, user);
       if (user.telegramReferrerId) {
         console.log('Sharing food with', user.telegramReferrerId);
-        await this.foodService.shareFood(user.telegramReferrerId).catch((e) => {
-          console.error('Error sharing food', e);
-        });
+        await this.foodService
+          .shareFood(user.telegramReferrerId, user)
+          .catch((e) => {
+            console.error('Error sharing food', e);
+          });
       }
       await this.giveBreakfast(user.telegramId);
       console.log('Awake', user.telegramId, user.name, user.lastAwake, diff);

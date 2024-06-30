@@ -15,12 +15,19 @@ export class FoodService {
     console.log('Sharing food with', telegramReferrerId);
     const referrer = await this.giveSandwich(telegramReferrerId);
     if (user) {
-      await this.tgService.sendTelegramMessage(
-        telegramReferrerId,
+      console.log(
         `🥪 ${
           user?.name || user?.telegramUsername || user?.telegramId
         } gave you a sandwich!`,
-      ).catch(e => console.warn('Failed to send message: ' + e.message));
+      );
+      await this.tgService
+        .sendTelegramMessage(
+          telegramReferrerId,
+          `🥪 ${
+            user?.name || user?.telegramUsername || user?.telegramId
+          } gave you a sandwich!`,
+        )
+        .catch((e) => console.warn('Failed to send message: ' + e.message));
     }
     console.log(
       'Given sandwich to',
@@ -39,7 +46,7 @@ export class FoodService {
       await this.tgService.sendTelegramMessage(
         referrer.telegramReferrerId,
         `☕️ some friend of ${
-          user?.name || user?.telegramUsername || user?.telegramId
+          referrer?.name || referrer?.telegramUsername || referrer?.telegramId
         } gave you a coffee!`,
       );
     }

@@ -5,7 +5,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, MoreThan, Not, Repository } from 'typeorm';
 
 import { User } from './user.entity';
 import { TGService } from 'modules/tg/tg.service';
@@ -95,26 +95,43 @@ Valoramos muchísimo tu participación y seguimos pensando y desarrollando el fu
   }
 
   async count() {
-
-const msg = this.getReminderText({name: 'Joan', telegramId: '707'}, 'es');
-
-await this.tgService.sendAdminMessage(msg);
-
     return this.userRepository.count();
   }
 
-  async top() {
-    return this.userRepository.find({
-      order: {
-        steps: 'DESC',
-      },
-      take: 10,
+  // lastAwake or lastBonus is not null and more than 24 hours ago
+  async countActive() {
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    const thresholdDate = new Date(Date.now() - ONE_DAY);
+
+    return this.userRepository.count({
+      where: [
+        {
+          lastAwake: MoreThan(thresholdDate),
+          lastBonus: IsNull(),
+        },
+        {
+          lastAwake: IsNull(),
+          lastBonus: MoreThan(thresholdDate),
+        },
+        {
+          lastAwake: MoreThan(thresholdDate),
+          lastBonus: MoreThan(thresholdDate),
+        },
+      ],
     });
   }
 
+  async top() {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.telegramUsername IS NULL OR user.telegramUsername != :value', { value: 'vvmspace' })
+      .orderBy('user.steps', 'DESC')
+      .take(10)
+      .getMany();
+  }
+  
+
   async getReminderUser() {
     const ONE_DAY = 24 * 60 * 60 * 1000;
-    // const TWO_DAYS = 2 * ONE_DAY;
 
     const lastBonusDate = new Date(Date.now() - ONE_DAY);
     const lastReminderDate = new Date(Date.now() - ONE_DAY);
@@ -143,6 +160,8 @@ await this.tgService.sendAdminMessage(msg);
         (1000 * 60 * 60 * 24)
       : 0;
 
+    const diffHours = Math.floor(diffDays - Math.floor(diffDays)) * 24;
+
     user.lastReminder = new Date();
     await this.update(user.id, user);
 
@@ -151,10 +170,14 @@ await this.tgService.sendAdminMessage(msg);
       this.getReminderText(user, user.languageCode || 'en'),
     );
 
+    if (diffDays == 0) {
+      return;
+    }
+
     await this.tgService.sendAdminMessage(
-      `Reminded ${
-        user.telegramUsername || user.name || user.telegramId
-      } [${user.languageCode}] in ${diffDays} days.`,
+      `Reminded ${user.telegramUsername || user.name || user.telegramId} [${
+        user.languageCode
+      }] in ${Math.floor(diffDays)} days ${diffHours} hours.`,
     );
   }
 }

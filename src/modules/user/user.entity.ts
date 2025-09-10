@@ -28,6 +28,12 @@ export class User {
   @Column({ nullable: true })
   name: string;
 
+  @Column({ default: 0 })
+  dailyStreak: number;
+
+  @Column({ nullable: true })
+  lastDailyStreak: Date;
+
   @Column({ nullable: true })
   telegramUsername: string;
 

@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AwakeModule } from 'modules/awake/awake.module';
 import { TGModule } from 'modules/tg/tg.module';
+import { MissionModule } from 'modules/mission/mission.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -32,6 +33,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CommonModule,
     AwakeModule,
     TGModule,
+    MissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

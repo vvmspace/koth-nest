@@ -12,44 +12,68 @@ export class FoodService {
   ) {}
 
   async shareFood(telegramReferrerId: string, user?: Partial<User>) {
-    console.log('Sharing food with', telegramReferrerId);
+    console.log(`🥪 FOOD_SHARE: Starting food sharing process for referrer ${telegramReferrerId}`);
+    console.log(`👤 FOOD_SHARE: User who triggered sharing:`, {
+      id: user?.id,
+      telegramId: user?.telegramId,
+      name: user?.name,
+      telegramUsername: user?.telegramUsername
+    });
+    
     const referrer = await this.giveSandwich(telegramReferrerId);
+    console.log(`🥪 FOOD_SHARE: Sandwich given to referrer:`, {
+      referrerId: referrer.id,
+      telegramId: referrer.telegramId,
+      name: referrer.name,
+      telegramUsername: referrer.telegramUsername,
+      newSandwiches: referrer.sandwiches
+    });
+    
     if (user) {
-      console.log(
-        `🥪 ${
-          user?.name || user?.telegramUsername || user?.telegramId
-        } gave you a sandwich!`,
-      );
+      const sandwichMessage = `🥪 ${
+        user?.name || user?.telegramUsername || user?.telegramId
+      } gave you a sandwich!`;
+      
+      console.log(`📱 FOOD_SHARE: Sending sandwich notification to ${telegramReferrerId}:`, sandwichMessage);
+      
       await this.tgService
-        .sendTelegramMessage(
-          telegramReferrerId,
-          `🥪 ${
-            user?.name || user?.telegramUsername || user?.telegramId
-          } gave you a sandwich!`,
-        )
-        .catch((e) => console.warn('Failed to send message: ' + e.message));
+        .sendTelegramMessage(telegramReferrerId, sandwichMessage)
+        .catch((e) => {
+          console.error(`❌ FOOD_SHARE: Failed to send sandwich message to ${telegramReferrerId}:`, e.message);
+        });
     }
-    console.log(
-      'Given sandwich to',
-      referrer.name || referrer.telegramUsername,
-      referrer.telegramId,
-    );
+    
+    console.log(`☕ FOOD_SHARE: Checking if referrer has their own referrer...`);
+    console.log(`🔍 FOOD_SHARE: Referrer's referrer ID: ${referrer.telegramReferrerId}`);
+    
     if (
       !referrer.telegramReferrerId ||
       referrer.telegramReferrerId === referrer.telegramId
     ) {
+      console.log(`ℹ️ FOOD_SHARE: Referrer ${telegramReferrerId} has no referrer or self-referral, stopping chain`);
       return;
     }
+    
+    console.log(`☕ FOOD_SHARE: Referrer has referrer ${referrer.telegramReferrerId}, giving coffee...`);
     await this.giveCoffee(referrer.telegramReferrerId);
-    console.log('Given coffee to', referrer.telegramReferrerId);
+    console.log(`☕ FOOD_SHARE: Coffee given to referrer's referrer ${referrer.telegramReferrerId}`);
+    
     if (user) {
+      const coffeeMessage = `☕️ some friend of ${
+        referrer?.name || referrer?.telegramUsername || referrer?.telegramId
+      } gave you a coffee!`;
+      
+      console.log(`📱 FOOD_SHARE: Sending coffee notification to ${referrer.telegramReferrerId}:`, coffeeMessage);
+      
       await this.tgService.sendTelegramMessage(
         referrer.telegramReferrerId,
-        `☕️ some friend of ${
-          referrer?.name || referrer?.telegramUsername || referrer?.telegramId
-        } gave you a coffee!`,
-      );
+        coffeeMessage,
+      ).catch((e) => {
+        console.error(`❌ FOOD_SHARE: Failed to send coffee message to ${referrer.telegramReferrerId}:`, e.message);
+      });
     }
+    
+    console.log(`✅ FOOD_SHARE: Food sharing process completed for referrer ${telegramReferrerId}`);
   }
 
   async giveCoffee(telegramId: string, count = 1) {

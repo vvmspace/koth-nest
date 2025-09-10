@@ -45,6 +45,7 @@ export class UsersService {
   }
 
   getReminderText(user: Partial<User>, lang = 'en') {
+    const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'KingOfTheHillGameBot';
     const texts = {
       en: `🎁 *Hey ${user.name}! Don't forget to take your daily bonus!* 🎁
 
@@ -65,11 +66,11 @@ We greatly appreciate your engagement and continue to brainstorm and develop the
 
 
 🎁 *Guaranteed Bonus for Inviting Friends until July 7, 2024:*
-- Share the link with a friend: https://t.me/KingOfTheHillGameBot?start=${user.telegramId}
+- Share the link with a friend: https://t.me/${botUsername}?start=${user.telegramId}
 - And receive *100 guaranteed steps 👣*, plus a random bonus like a magical amount of coffee ☕️ and sandwiches 🥪 that you’ll surely enjoy!
 - To maximize your rewards, share links in themed chats and groups! 🚀`,
       es: `🎁 *¡Hola ${user.name}! ¡No olvides reclamar tu bono diario!* 🎁
-Valoramos muchísimo tu participación y seguimos pensando y desarrollando el futuro del juego.
+${Math.random() > 0.1 ? `Valoramos muchísimo tu participación y seguimos pensando y desarrollando el futuro del juego.
 
 ✅ *En qué estamos trabajando:*
 - Reestructuración del código: Sabemos sobre el problema con la interfaz de usuario, y estamos trabajando en una nueva versión. Las correcciones y modificaciones de la versión actual están orientadas a que la nueva versión sea más amigable tanto para desarrolladores como para usuarios.
@@ -81,10 +82,10 @@ Valoramos muchísimo tu participación y seguimos pensando y desarrollando el fu
 - Monetización: Queremos introducir varias funciones que mantendrán el equilibrio del juego. ¡En el futuro, compartiremos el progreso del juego con los usuarios más activos!
 - Nuestro objetivo es que la actividad de los usuarios sea beneficiosa para la sociedad.
 
-*¡Nuestro proyecto es más que un juego!*
+*¡Nuestro proyecto es más que un juego!*` : ''}
 
 🎁 *Bono garantizado por invitar amigos hasta el 7 de julio de 2024:*
-- *Envía el enlace a un amigo:* https://t.me/KingOfTheHillGameBot?start=${user.telegramId}
+- *Envía el enlace a un amigo:* https://t.me/${botUsername}?start=${user.telegramId}
 - Y recibe *100 pasos 👣 garantizados*, además de un bono aleatorio, como una cantidad mágica de café ☕️ y sándwiches 🥪 que seguro te encantarán.
 - ¡Para aumentar la efectividad, compartí los enlaces en chats y grupos temáticos!`,
     };

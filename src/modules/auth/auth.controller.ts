@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
@@ -56,5 +56,38 @@ export class AuthController {
       user,
       nextAwake,
     };
+  }
+
+  @Post('dev-login')
+  async devLogin(
+    @Body()
+    body: {
+      telegramId: string;
+      username?: string;
+      firstName?: string;
+      languageCode?: string;
+    },
+  ): Promise<JWTResponse> {
+    const appEnv = this.configService.get('APP_ENV');
+    if (appEnv !== 'dev') {
+      throw new UnauthorizedException('Dev login is allowed only in dev env');
+    }
+
+    const telegramId = String(body.telegramId || '').trim();
+    if (!telegramId) {
+      throw new UnauthorizedException('telegramId is required');
+    }
+
+    let user = await this.userService.getByTelegramId(telegramId);
+    if (!user) {
+      user = await this.userService.create({
+        telegramId,
+        name: body.firstName || body.username || telegramId,
+        telegramUsername: body.username,
+        languageCode: body.languageCode || 'en',
+      });
+    }
+
+    return this.authService.createToken(user);
   }
 }
